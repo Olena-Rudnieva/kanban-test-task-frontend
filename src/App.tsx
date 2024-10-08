@@ -1,12 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Layout } from './components';
+import { Routes, Route } from 'react-router-dom';
+import { Boards, BoardView, Home } from './pages';
 
 const App = () => {
   return (
-    <div className="App">
-      <p>Hi!</p>
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="/boards" element={<Boards />} />
+        <Route path="/boards/:id" element={<BoardView />} />
+      </Route>
+    </Routes>
   );
 };
 
