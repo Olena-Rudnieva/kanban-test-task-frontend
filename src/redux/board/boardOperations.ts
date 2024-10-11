@@ -5,6 +5,8 @@ import { Board, Card } from '../../types';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
+console.log('BASE_URL:', BASE_URL);
+
 axios.defaults.baseURL = `${BASE_URL}`;
 
 export const fetchBoards = createAsyncThunk(
