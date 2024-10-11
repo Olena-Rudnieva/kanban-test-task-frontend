@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { BASE_URL, BOARDS_URL } from '../../constants';
+import { BOARDS_URL } from '../../constants';
 import { Board, Card } from '../../types';
+
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 axios.defaults.baseURL = `${BASE_URL}`;
 
