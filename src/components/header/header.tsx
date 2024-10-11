@@ -1,17 +1,14 @@
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../redux/store';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createBoard, fetchBoards, selectBoards } from '../../redux';
+import { createBoard, fetchBoards } from '../../redux';
 import { Input } from '../input';
 import { Button } from '../button';
 
 export const Header = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const boards = useSelector(selectBoards);
   const navigate = useNavigate();
-  console.log('boards', boards);
 
   useEffect(() => {
     dispatch(fetchBoards());
@@ -19,7 +16,6 @@ export const Header = () => {
 
   const [newBoardName, setNewBoardName] = useState('');
   const [boardIdInput, setBoardIdInput] = useState('');
-  console.log('boardIdInput', boardIdInput);
 
   const handleCreateBoard = () => {
     if (newBoardName.trim()) {
@@ -38,8 +34,6 @@ export const Header = () => {
   };
 
   const handleLoadBoard = () => {
-    console.log('here', boardIdInput);
-
     if (boardIdInput.trim()) {
       navigate(`/boards/${boardIdInput}`);
       setBoardIdInput('');
@@ -55,7 +49,11 @@ export const Header = () => {
           placeholder="New board name"
           className="w-[300px]"
         />
-        <Button onClick={handleCreateBoard} className="px-5 py-2">
+        <Button
+          onClick={handleCreateBoard}
+          className="px-5 py-2"
+          disabled={!newBoardName.trim()}
+        >
           Create Board
         </Button>
       </div>
@@ -67,7 +65,11 @@ export const Header = () => {
           placeholder="Enter a board ID here"
           className="w-[300px]"
         />
-        <Button onClick={handleLoadBoard} className="px-10 py-2">
+        <Button
+          onClick={handleLoadBoard}
+          className="px-10 py-2"
+          disabled={!boardIdInput.trim()}
+        >
           Load
         </Button>
       </div>

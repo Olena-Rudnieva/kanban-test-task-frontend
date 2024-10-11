@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BASE_URL, BOARDS_URL } from '../../constants';
-import { Board } from '../../types';
+import { Board, Card } from '../../types';
 
 axios.defaults.baseURL = `${BASE_URL}`;
 
@@ -21,9 +21,6 @@ export const fetchBoardById = createAsyncThunk(
   'boards/fetchBoardById',
   async (boardId: string) => {
     const response = await axios.get(`${BOARDS_URL}/${boardId}`);
-
-    console.log('response', response);
-
     return response.data;
   }
 );
@@ -57,5 +54,76 @@ export const deleteBoard = createAsyncThunk(
   async (boardId: string) => {
     const response = await axios.delete(`${BOARDS_URL}/${boardId}`);
     return response.data;
+  }
+);
+
+export const addCardToColumn = createAsyncThunk(
+  'boards/addCardToColumn',
+  async (
+    {
+      boardId,
+      columnId,
+      cardData,
+    }: { boardId: string; columnId: string; cardData: Card },
+    thunkAPI
+  ) => {
+    try {
+      const response = await axios.post(
+        `${BOARDS_URL}/${boardId}/columns/${columnId}/cards`,
+        cardData
+      );
+      return { boardId, columnId, card: response.data };
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const updateCardInColumn = createAsyncThunk(
+  'boards/updateCardInColumn',
+  async (
+    {
+      boardId,
+      columnId,
+      cardId,
+      cardData,
+    }: {
+      boardId: string;
+      columnId: string;
+      cardId: string;
+      cardData: Partial<Card>;
+    },
+    thunkAPI
+  ) => {
+    try {
+      const response = await axios.put(
+        `${BOARDS_URL}/${boardId}/columns/${columnId}/cards/${cardId}`,
+        cardData
+      );
+      return { boardId, columnId, cardId, card: response.data };
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const deleteCardFromColumn = createAsyncThunk(
+  'boards/deleteCardFromColumn',
+  async (
+    {
+      boardId,
+      columnId,
+      cardId,
+    }: { boardId: string; columnId: string; cardId: string },
+    thunkAPI
+  ) => {
+    try {
+      await axios.delete(
+        `${BOARDS_URL}/${boardId}/columns/${columnId}/cards/${cardId}`
+      );
+      return { boardId, columnId, cardId };
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
   }
 );

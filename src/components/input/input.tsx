@@ -17,7 +17,7 @@ export const Input = ({
       value={value}
       onChange={onChange}
       placeholder={placeholder || 'Enter text'}
-      className={`border border-gray-600 p-[10px] rounded-md ${className}`}
+      className={`border border-gray-600 p-[10px] shadow-sm rounded-md ${className}`}
     />
   );
 };

@@ -43,7 +43,7 @@ export const BoardCard = ({ board }: BoardCardProps) => {
   };
 
   return (
-    <li className="border border-gray-400 p-[40px] rounded-md bg-slate-50">
+    <li className="border border-gray-200 p-[40px] shadow-lg rounded-md bg-slate-50">
       {isEditing ? (
         <div className="flex items-baseline">
           <Input
@@ -52,7 +52,11 @@ export const BoardCard = ({ board }: BoardCardProps) => {
             placeholder="Enter a board name"
             className="w-[170px] p-[5px] mb-4"
           />
-          <Button onClick={handleSave} className="px-2 py-1 ml-2">
+          <Button
+            onClick={handleSave}
+            className="px-2 py-1 ml-2"
+            disabled={!newName.trim()}
+          >
             Save
           </Button>
         </div>
