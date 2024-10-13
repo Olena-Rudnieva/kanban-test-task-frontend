@@ -3,13 +3,12 @@ import { useState } from 'react';
 import { Card, Column } from '../../types';
 import { TaskCard } from '../taskCard';
 import { Modal } from '../modal';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../redux/store';
 import {
   addCardToColumn,
   deleteCardFromColumn,
   updateCardInColumn,
-  selectCardsByColumnId,
 } from '../../redux';
 import { AddCard } from '../addCard';
 
@@ -19,20 +18,14 @@ interface ColumnProps {
 }
 
 export const BoardColumn = ({ column, boardId }: ColumnProps) => {
+  console.log('test column', column);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCard, setNewCard] = useState({ title: '', description: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
 
   const dispatch = useDispatch<AppDispatch>();
-
-  const cards = useSelector((state: RootState) => {
-    if (!column._id) {
-      console.warn('Column ID is undefined');
-      return [];
-    }
-    return selectCardsByColumnId(boardId, column._id)(state);
-  }) as Card[];
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => {
@@ -100,8 +93,8 @@ export const BoardColumn = ({ column, boardId }: ColumnProps) => {
             {...provided.droppableProps}
             ref={provided.innerRef}
           >
-            {Array.isArray(cards) &&
-              cards.map((card, index) => (
+            {Array.isArray(column.cards) &&
+              column.cards.map((card, index) => (
                 <TaskCard
                   card={card}
                   onEdit={() => handleEditCard(card)}

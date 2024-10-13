@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { BOARDS_URL } from '../../constants';
-import { Board, Card } from '../../types';
+import { Board, Card, Column } from '../../types';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -126,6 +126,23 @@ export const deleteCardFromColumn = createAsyncThunk(
         `${BOARDS_URL}/${boardId}/columns/${columnId}/cards/${cardId}`
       );
       return { boardId, columnId, cardId };
+    } catch (e: any) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const updateColumns = createAsyncThunk(
+  'boards/updateColumns',
+  async (
+    { id, updatedColumns }: { id: string; updatedColumns: Column[] },
+    thunkAPI
+  ) => {
+    try {
+      const response = await axios.put(`${BOARDS_URL}/${id}/columns`, {
+        columns: updatedColumns,
+      });
+      return response.data;
     } catch (e: any) {
       return thunkAPI.rejectWithValue(e.message);
     }

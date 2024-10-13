@@ -9,6 +9,7 @@ import {
   fetchBoards,
   updateBoard,
   updateCardInColumn,
+  updateColumns,
 } from './boardOperations';
 
 interface BoardState {
@@ -85,6 +86,15 @@ const boardSlice = createSlice({
         selectedColumn.cards = selectedColumn.cards.filter(
           (card) => card._id !== cardId
         );
+      }
+    });
+    builder.addCase(updateColumns.fulfilled, (state, action) => {
+      const updatedBoard = action.payload;
+      const index = state.boards.findIndex(
+        (board) => board._id === updatedBoard._id
+      );
+      if (index !== -1) {
+        state.boards[index] = updatedBoard;
       }
     });
   },
