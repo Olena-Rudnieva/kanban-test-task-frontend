@@ -14,7 +14,6 @@ export const BoardView = () => {
   const { id } = useParams<{ id: string }>();
 
   const board = useSelector(selectCurrentBoard);
-  console.log('board', board);
   const [columns, setColumns] = useState<Column[]>(board?.columns || []);
 
   useEffect(() => {

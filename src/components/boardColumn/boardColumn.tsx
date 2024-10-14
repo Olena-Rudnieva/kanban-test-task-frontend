@@ -18,8 +18,6 @@ interface ColumnProps {
 }
 
 export const BoardColumn = ({ column, boardId }: ColumnProps) => {
-  console.log('test column', column);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCard, setNewCard] = useState({ title: '', description: '' });
   const [isEditing, setIsEditing] = useState(false);
@@ -61,8 +59,6 @@ export const BoardColumn = ({ column, boardId }: ColumnProps) => {
   };
 
   const handleEditCard = (card: Card) => {
-    console.log('here');
-
     if (card._id) {
       setSelectedCardId(card._id);
       setNewCard({ title: card.title, description: card.description });
