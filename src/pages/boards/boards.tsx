@@ -1,18 +1,11 @@
 import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { fetchBoards, selectBoards } from '../../redux';
-import { AppDispatch } from '../../redux/store';
-import { useEffect } from 'react';
+import { selectBoards } from '../../redux';
+
 import { Link } from 'react-router-dom';
 import { BoardCard } from '../../components';
 
 const Boards = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const boards = useSelector(selectBoards);
-
-  useEffect(() => {
-    dispatch(fetchBoards());
-  }, [dispatch]);
 
   return (
     <div className="w-full px-[20px] my-0 mx-auto max-w-[1200px] flex flex-col justify-center items-center">

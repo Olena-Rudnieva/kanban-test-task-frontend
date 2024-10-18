@@ -1,83 +1,35 @@
 import { Droppable } from 'react-beautiful-dnd';
-import { useState } from 'react';
-import { Card, Column } from '../../types';
+import { Dispatch } from 'react';
+import { Column } from '../../types';
 import { TaskCard } from '../taskCard';
 import { Modal } from '../modal';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../redux/store';
-import {
-  addCardToColumn,
-  deleteCardFromColumn,
-  updateCardInColumn,
-} from '../../redux';
 import { AddCard } from '../addCard';
+import { useBoardColumnOperations } from './hooks';
 
 interface ColumnProps {
   column: Column;
+  columns: Column[];
+  setColumns: Dispatch<React.SetStateAction<Column[]>>;
   boardId: string;
 }
 
-export const BoardColumn = ({ column, boardId }: ColumnProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newCard, setNewCard] = useState({ title: '', description: '' });
-  const [isEditing, setIsEditing] = useState(false);
-  const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
-
-  const dispatch = useDispatch<AppDispatch>();
-
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setNewCard({ title: '', description: '' });
-    setIsEditing(false);
-    setSelectedCardId(null);
-  };
-
-  const handleAddCard = () => {
-    if (newCard.title.trim() === '') return;
-
-    if (isEditing && selectedCardId) {
-      dispatch(
-        updateCardInColumn({
-          boardId,
-          columnId: column._id!,
-          cardId: selectedCardId,
-          cardData: newCard,
-        })
-      );
-    } else {
-      dispatch(
-        addCardToColumn({
-          boardId,
-          columnId: column._id!,
-          cardData: newCard,
-        })
-      );
-    }
-
-    handleCloseModal();
-  };
-
-  const handleEditCard = (card: Card) => {
-    if (card._id) {
-      setSelectedCardId(card._id);
-      setNewCard({ title: card.title, description: card.description });
-      setIsEditing(true);
-      setIsModalOpen(true);
-    } else {
-      console.error('Card ID is undefined');
-    }
-  };
-
-  const handleDeleteCard = (cardId: string) => {
-    dispatch(
-      deleteCardFromColumn({
-        boardId,
-        columnId: column._id!,
-        cardId,
-      })
-    );
-  };
+export const BoardColumn = ({
+  column,
+  columns,
+  setColumns,
+  boardId,
+}: ColumnProps) => {
+  const {
+    isModalOpen,
+    newCard,
+    isEditing,
+    handleOpenModal,
+    handleCloseModal,
+    handleAddCard,
+    handleEditCard,
+    handleDeleteCard,
+    setNewCard,
+  } = useBoardColumnOperations({ column, columns, setColumns, boardId });
 
   return (
     <div>

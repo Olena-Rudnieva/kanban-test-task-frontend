@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { IoMdClose } from 'react-icons/io';
+import ReactDOM from 'react-dom';
 
 interface ModalProps {
   onClose: () => void;
@@ -7,7 +8,7 @@ interface ModalProps {
 }
 
 export const Modal = ({ onClose, children }: ModalProps) => {
-  return (
+  return ReactDOM.createPortal(
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-8 rounded-md shadow-lg relative z-[100px]">
         <button
@@ -18,6 +19,7 @@ export const Modal = ({ onClose, children }: ModalProps) => {
         </button>
         {children}
       </div>
-    </div>
+    </div>,
+    document.getElementById('modal-root') as HTMLElement
   );
 };
